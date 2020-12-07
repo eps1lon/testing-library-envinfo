@@ -1,44 +1,54 @@
 #!/usr/bin/env node
-const { spawnSync } = require("child_process");
+const envinfo = require("envinfo");
 
-const options = {
-  npmPackages: `{${[
-    "@testing-library/*",
-    // important transitive dependencies
-    "aria-query",
-    "dom-accessibility-api",
-    // Libraries tested by @testing-library/*
-    "react",
-    "react-dom",
-    // testing environment
-    "jsdom",
-    // test runner
-    "jest",
-  ]}}`,
-  Binaries: ["Node", "Yarn", "npm"],
-  System: ["OS"],
-};
+const [info, ...args] = process.argv.slice(2);
+const json = args.indexOf("--json") !== -1;
 
-const { error, stderr, stdout, status } = spawnSync(
-  "npx",
-  [
-    "envinfo",
-    "--raw",
-    `${JSON.stringify(options)}`,
-    "--duplicates",
-    "--fullTree",
-    "--showNotFound",
-  ],
-  {
-    encoding: "utf-8",
+function reactInfo() {
+  return envinfo.run(
+    {
+      npmPackages: `{${[
+        "@testing-library/*",
+        // important transitive dependencies
+        "aria-query",
+        "dom-accessibility-api",
+        // Libraries tested by @testing-library/*
+        "react",
+        "react-dom",
+        // testing environment
+        "jsdom",
+        // test runner
+        "jest",
+      ]}}`,
+      Binaries: ["Node", "Yarn", "npm"],
+      System: ["OS"],
+    },
+    {
+      json,
+      duplicates: true,
+      fullTree: true,
+      showNotFound: true,
+    }
+  );
+}
+
+let getInfo;
+switch (info) {
+  case "react":
+    getInfo = reactInfo;
+    break;
+  default:
+    getInfo = () => {
+      throw new Error(`Unable to provide environment info for '${info}'.`);
+    };
+}
+
+getInfo().then(
+  (info) => {
+    console.log(info);
+  },
+  (error) => {
+    console.error(error);
+    process.exit(1);
   }
 );
-
-if (error) {
-  throw error;
-}
-console.log(stdout);
-if (stderr) {
-  console.error(stderr);
-  process.exit(status);
-}

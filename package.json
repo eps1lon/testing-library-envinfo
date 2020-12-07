@@ -3,17 +3,22 @@
   "license": "MIT",
   "description": "Logs infos about the environment relevant to @testing-library/*",
   "version": "1.2.0",
-  "bin": {
-    "envinfo": "./index.js"
+  "bin": "./index.js",
+  "dependencies": {
+    "envinfo": "^7.7.3"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/eps1lon/testing-library-envinfo"
   },
+  "scripts": {
+    "test": "jest"
+  },
   "devDependencies": {
     "@testing-library/react": "^11.2.2",
     "envinfo": "^7.7.3",
     "jest": "^26.4.2",
+    "prettier": "^2.2.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
   }
