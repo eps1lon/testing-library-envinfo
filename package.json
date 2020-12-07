@@ -2,7 +2,7 @@
   "name": "testing-library-envinfo",
   "license": "MIT",
   "description": "Logs infos about the environment relevant to @testing-library/*",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "bin": {
     "envinfo": "./index.js"
   },
