@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const envinfo = require("envinfo");
 
 envinfo
