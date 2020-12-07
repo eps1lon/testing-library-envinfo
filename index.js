@@ -19,7 +19,7 @@ const options = {
   System: ["OS"],
 };
 
-const { status } = spawnSync(
+const { error, stderr, stdout, status } = spawnSync(
   "npx",
   [
     "envinfo",
@@ -30,10 +30,15 @@ const { status } = spawnSync(
     "--showNotFound",
   ],
   {
-    stdio: "inherit",
+    encoding: "utf-8",
   }
 );
 
-if (status !== null) {
+if (error) {
+  throw error;
+}
+console.log(stdout);
+if (stderr) {
+  console.error(stderr);
   process.exit(status);
 }
