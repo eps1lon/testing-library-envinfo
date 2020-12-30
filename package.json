@@ -2,7 +2,7 @@
   "name": "testing-library-envinfo",
   "license": "MIT",
   "description": "Logs infos about the environment relevant to @testing-library/*",
-  "version": "0.0.0-semantically-released",
+  "version": "1.2.0",
   "bin": "./index.js",
   "dependencies": {
     "envinfo": "^7.7.3"
@@ -15,6 +15,8 @@
     "test": "jest"
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^0.2.7",
+    "@changesets/cli": "^2.12.0",
     "@testing-library/react": "^11.2.2",
     "envinfo": "^7.7.3",
     "jest": "^26.4.2",
