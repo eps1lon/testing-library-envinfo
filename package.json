@@ -12,6 +12,7 @@
     "url": "https://github.com/eps1lon/testing-library-envinfo"
   },
   "scripts": {
+    "release": "yarn changeset publish",
     "test": "jest"
   },
   "devDependencies": {
