@@ -1,19 +1,9 @@
 name: CI
 on:
   push:
-    branches:
-      - '+([0-9])?(.{+([0-9]),x}).x'
-      - 'main'
-      - 'next'
-      - 'next-major'
-      - 'beta'
-      - 'alpha'
-      - '!all-contributors/**'
-  pull_request: {}
+  pull_request:
 jobs:
   main:
-    # ignore all-contributors PRs
-    if: ${{ !contains(github.head_ref, 'all-contributors') }}
     strategy:
       matrix:
         node: [10.13, 12, 14, 15]
@@ -36,10 +26,7 @@ jobs:
   release:
     needs: main
     runs-on: ubuntu-latest
-    if:
-      ${{ github.repository == 'eps1lon/testing-library-envinfo' &&
-      contains('refs/heads/main,refs/heads/beta,refs/heads/next,refs/heads/alpha',
-      github.ref) && github.event_name == 'push' }}
+    if: ${{ github.repository == 'eps1lon/testing-library-envinfo' && contains('refs/heads/main', github.ref) && github.event_name == 'push' }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -52,19 +39,11 @@ jobs:
       - name: Install
         run: npm install
 
-      - name: Release
-        uses: cycjimmy/semantic-release-action@v2
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@master
         with:
-          semantic_version: 17
-          branches: |
-            [
-              '+([0-9])?(.{+([0-9]),x}).x',
-              'main',
-              'next',
-              'next-major',
-              {name: 'beta', prerelease: true},
-              {name: 'alpha', prerelease: true}
-            ]
+          publish: yarn release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
